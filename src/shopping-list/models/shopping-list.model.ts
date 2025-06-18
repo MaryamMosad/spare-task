@@ -1,32 +1,28 @@
-// models/ShoppingListItem.ts
 import {
   Table,
-  Column,
-  Model,
-  DataType,
-  ForeignKey,
   PrimaryKey,
   AutoIncrement,
+  Column,
+  DataType,
+  ForeignKey,
+  Model,
   BelongsTo,
-  Unique,
+  AllowNull,
 } from "sequelize-typescript";
-import { Product } from "../../products/models/products.model";
+import { PromoCode } from "../../promo-code/models/promo-code.model";
 
 @Table
-export class ShoppingListItem extends Model {
+export class ShoppingList extends Model {
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
   id: number;
+  
+  @AllowNull(true)
+  @ForeignKey(() => PromoCode)
+  @Column(DataType.INTEGER)
+  promoCodeId: number;
 
-  @Unique
-  @ForeignKey(() => Product)
-  @Column({ type: DataType.INTEGER, onDelete: "CASCADE" })
-  productId: number;
-
-  @BelongsTo(() => Product)
-  product: Product;
-
-  @Column
-  quantity: number;
+  @BelongsTo(() => PromoCode)
+  promoCode: PromoCode;
 }

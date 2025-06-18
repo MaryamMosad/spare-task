@@ -14,7 +14,7 @@ export const sequelize = new Sequelize({
 
 export function dbConnection() {
   sequelize
-    .sync({ force: false })
+    .sync({ alter: true })
     .then(() => console.log("DATABASE CONNECTED SUCCESSFULLY"))
     .catch(
       (err) => console.log(err.original)
