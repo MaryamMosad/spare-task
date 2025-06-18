@@ -63,15 +63,15 @@ const getShoppingList = async (paginate: PaginationDto) => {
     limit: paginate.limit,
     offset: paginate.offset,
     include: [{ model: Product, attributes: ["id", "name", "price"] }],
-    attributes: ["quantity", "shoppingListId"],
+    attributes: ["quantity"],
   });
 
-  const totalPrice = await getShoppingListTotalPrice();
+  const metaData = await getShoppingListMetaData();
 
-  return { totalPrice, ...transformResponse(res, paginate) };
+  return { metaData, ...transformResponse(res, paginate) };
 };
 
-const getShoppingListTotalPrice = async () => {
+const getShoppingListMetaData = async () => {
   const total = await ShoppingListItem.findAll({
     attributes: [
       [
@@ -91,10 +91,9 @@ const getShoppingListTotalPrice = async () => {
 
   const totalPrice = total[0]["totalPrice"] ?? 0;
 
-  const discountPercentage = await getShoppingListDiscountPercentage();
-
-  if (discountPercentage) return totalPrice * (100 - discountPercentage);
-  return totalPrice;
+  const discountPercentage = await getShoppingListDiscountDetails();
+  const finalPrice = totalPrice * (100 - discountPercentage.discount);
+  return { finalPrice, promoCodeApplied: discountPercentage.promoCode };
 };
 
 /** Shopping list logic is working under the assumpion that
@@ -107,9 +106,12 @@ const getCurrentShoppingList = async () => {
   return await ShoppingList.create({});
 };
 
-const getShoppingListDiscountPercentage = async () => {
+const getShoppingListDiscountDetails = async () => {
   const shoppingList = await ShoppingList.findOne({ include: [PromoCode] });
-  return shoppingList?.promoCode?.discountPercentage ?? 0;
+  return {
+    discount: shoppingList?.promoCode?.discountPercentage ?? 0,
+    promoCode: shoppingList.promoCode?.code ?? null,
+  };
 };
 
 export default { addToShoppingList, removeFromShoppingList, getShoppingList };
