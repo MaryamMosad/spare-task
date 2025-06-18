@@ -1,6 +1,8 @@
+import { Transaction } from "sequelize";
 import { HttpError } from "../../_common/errors/http-error";
 import { transformResponse } from "../../_common/pagination";
 import { PaginationDto } from "../../_common/pagination/pagination-type";
+import { AddToShoppingListDto } from "../../shopping-list/dto";
 import { CreateProductDto, UpdateProductDto } from "../dto";
 import { Product } from "../models/products.model";
 
@@ -38,4 +40,40 @@ const products = async (paginate: PaginationDto) => {
   return transformResponse(res, paginate);
 };
 
-export default { createProduct, deleteProduct, updateProduct, products };
+const decreaseProductQuantity = async (
+  input: AddToShoppingListDto,
+  transaction: Transaction
+) => {
+  await Product.decrement("quantity", {
+    by: input.quantity,
+    transaction,
+    where: { id: input.productId },
+  });
+};
+
+const validateProductAvailability = async (input: AddToShoppingListDto) => {
+  const product = await productOrError(input.productId);
+  if (product.quantity < input.quantity)
+    throw new HttpError("Not enough stock", 409);
+};
+
+const increaseProductQuantity = async (
+  input: AddToShoppingListDto,
+  transaction: Transaction
+) => {
+  await Product.increment("quantity", {
+    by: input.quantity,
+    transaction,
+    where: { id: input.productId },
+  });
+};
+
+export default {
+  createProduct,
+  deleteProduct,
+  updateProduct,
+  products,
+  decreaseProductQuantity,
+  validateProductAvailability,
+  increaseProductQuantity,
+};

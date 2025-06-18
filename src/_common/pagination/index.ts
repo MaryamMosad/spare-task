@@ -18,7 +18,7 @@ export const transformResponse = <T>(
   paginate: PaginationDto
 ) => {
   return {
-    total: response.count,
+    totalCount: response.count,
     page: paginate.page,
     limit: paginate.limit,
     data: response.rows,
