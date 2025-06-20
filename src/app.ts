@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json());
 
 app.use("/products/", productsRouter);
-app.use("/shopping-list/", shoppingListRouter);
+app.use("/shopping-lists/", shoppingListRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.json("Hello!");

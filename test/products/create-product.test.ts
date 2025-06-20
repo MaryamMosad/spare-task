@@ -1,8 +1,11 @@
 import request from "supertest";
 import app from "../../src/app";
 import { mockProduct } from "../../src/products/mocks";
+import { Product } from "../../src/products/models/products.model";
 
 describe("create product", () => {
+  beforeEach(async () => await Product.destroy({ where: {} }));
+
   it("create product successfully", async () => {
     const product = mockProduct();
     const res = await request(app).post("/products").send(product);
@@ -15,6 +18,6 @@ describe("create product", () => {
     const product = mockProduct({ quantity: "string" });
     const res = await request(app).post("/products").send(product);
     expect(res.status).toBe(400);
-    expect(res.body.message).toBeDefined()
+    expect(res.body.message).toBeDefined();
   });
 });

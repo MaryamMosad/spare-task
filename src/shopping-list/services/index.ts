@@ -92,7 +92,7 @@ const getShoppingListMetaData = async () => {
   const totalPrice = total[0]["totalPrice"] ?? 0;
 
   const discountPercentage = await getShoppingListDiscountDetails();
-  const finalPrice = totalPrice * (100 - discountPercentage.discount);
+  const finalPrice = totalPrice * ((100 - discountPercentage.discount) / 100);
   return { finalPrice, promoCodeApplied: discountPercentage.promoCode };
 };
 
@@ -110,7 +110,7 @@ const getShoppingListDiscountDetails = async () => {
   const shoppingList = await ShoppingList.findOne({ include: [PromoCode] });
   return {
     discount: shoppingList?.promoCode?.discountPercentage ?? 0,
-    promoCode: shoppingList.promoCode?.code ?? null,
+    promoCode: shoppingList?.promoCode?.code ?? null,
   };
 };
 
