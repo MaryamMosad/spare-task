@@ -9,8 +9,8 @@ describe("delete product", () => {
   it("delete product successfully", async () => {
     const product = await Product.create({ ...mockProduct() });
     const res = await request(app).delete(`/products/${product.id}`);
-    expect(res.status).toBe(200);
-    expect(res.body.data).toBe(true);
+    expect(res.status).toBe(204);
+    expect(res.body.data).toBeUndefined();
   });
 
   it("throws error for non-existent product", async () => {

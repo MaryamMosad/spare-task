@@ -22,10 +22,8 @@ const removeFromShoppingList = async (
   next: NextFunction
 ) => {
   const { productId } = req.params;
-  const deleteRes = await shoppingListService.removeFromShoppingList(
-    +productId
-  );
-  res.status(200).json({ data: deleteRes });
+  await shoppingListService.removeFromShoppingList(+productId);
+  res.status(204).end();
 };
 
 const getShoppingList = async (

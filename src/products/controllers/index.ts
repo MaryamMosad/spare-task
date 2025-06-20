@@ -27,8 +27,8 @@ const deleteProduct = async (
   next: NextFunction
 ) => {
   const { productId } = req.params;
-  const deleteRes = await productService.deleteProduct(+productId);
-  res.status(200).json({ data: deleteRes });
+  await productService.deleteProduct(+productId);
+  res.status(204).end();
 };
 
 const products = async (req: Request, res: Response, next: NextFunction) => {

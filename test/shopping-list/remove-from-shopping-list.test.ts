@@ -19,8 +19,8 @@ describe("remove product from shopping list", () => {
 
     const res = await request(app).delete(`/shopping-lists/${product.id}`);
 
-    expect(res.status).toBe(200);
-    expect(res.body.data).toBeTruthy();
+    expect(res.status).toBe(204);
+    expect(res.body.data).toBeUndefined();
 
     const productAfterUpdate = await Product.findByPk(product.id);
     expect(productAfterUpdate.quantity).toBe(
