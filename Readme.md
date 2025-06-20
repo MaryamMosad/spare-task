@@ -1,5 +1,25 @@
 # Spare Task
 
+## Table of Contents
+
+- [Description](#description)
+- [Stack Used](#stack-used)
+- [Getting Started](#getting-started)
+  - [Start with Docker](#to-start-the-project-in-a-docker-environment-development-mode-run)
+  - [Start without Docker](#to-run-without-docker)
+- [Tests](#tests)
+- [API Endpoints](#api-endpoints)
+  - [Products](#products)
+    - 1. Get a list of products
+    - 2. Create a new product
+    - 3. Update a product
+    - 4. Delete a product
+  - [Shopping List](#shopping-list)
+    - 1. Get shopping list
+    - 2. Add to shopping list
+    - 3. Remove from shopping list
+- [Postman Collection](#postman-collection)
+
 ## Description
 
 A simple API that allows users to:
