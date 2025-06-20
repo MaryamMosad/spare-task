@@ -8,7 +8,8 @@ export const validationMiddleware = (schema) => {
 
         if (error) {
           res.status(400).json({
-            error: error.details.map((d) => d.message).join(", "),
+            status: 400,
+            message: error.details.map((d) => d.message).join(", "),
           });
           return;
         }

@@ -1,22 +1,10 @@
-import express from "express";
 import { dbConnection } from "./_common/database/db-connection";
-import productsRouter from "./products/routes";
-import shoppingListRouter from "./shopping-list/routes";
+import app from "./app";
 
-import { errorMiddleware } from "./_common/middleware/error";
+dbConnection();
 
-const app = express();
 const PORT = process.env.PORT || 3000;
-
-app.use(express.json());
-
-app.use("/products/", productsRouter);
-app.use("/shopping-list/", shoppingListRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
 });
-
-dbConnection();
-
-app.use(errorMiddleware);

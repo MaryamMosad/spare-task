@@ -32,8 +32,7 @@ const deleteProduct = async (
 };
 
 const products = async (req: Request, res: Response, next: NextFunction) => {
-  const reqQuery = req.query;
-  const paginate = paginateConditions(reqQuery);
+  const paginate = paginateConditions(req.query);
   const productsRes = await productService.products(paginate);
   res.status(200).json(productsRes);
 };

@@ -33,8 +33,7 @@ const getShoppingList = async (
   res: Response,
   next: NextFunction
 ) => {
-  const reqQuery = req.query;
-  const paginate = paginateConditions(reqQuery);
+  const paginate = paginateConditions(req.query);
   const productsRes = await shoppingListService.getShoppingList(paginate);
   res.status(200).json(productsRes);
 };
