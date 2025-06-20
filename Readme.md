@@ -18,6 +18,10 @@
     - 1. Get shopping list
     - 2. Add to shopping list
     - 3. Remove from shopping list
+    - 4. Apply promo code
+  - [Promo Codes](#promo-codes)
+    - 1. Get a list of promo codes
+    - 2. create promo code
 - [Postman Collection](#postman-collection)
 
 ## Description
@@ -311,7 +315,7 @@ POST /shopping-lists/
 
 ---
 
-**_4- remove from shopping list._**
+**_3- remove from shopping list._**
 
 #### Endpoint
 
@@ -326,6 +330,120 @@ productId – ID of the product to remove from shopping list
 #### Success Response
 
 ##### status code: 204
+
+----
+----
+
+**_4- apply promo code to shopping list._**
+
+#### Endpoint
+
+```
+POST /shopping-lists/promo-code/apply
+```
+
+#### Request Body
+
+```json
+{
+  "code": "50%OFF"
+}
+```
+
+#### Success Response
+
+##### status code: 201
+
+##### Response body
+
+```json
+{
+  "data": true
+}
+```
+
+---
+
+### Promo Codes
+
+**_1- get a list of promo codes._**
+
+#### Endpoint
+
+```
+GET /promo-codes/
+```
+
+#### Query Parameters:
+
+- page (default 1)
+- limit (default 10)
+
+#### Success Response
+
+##### status code: 200
+
+##### Response body
+
+```json
+{
+  "totalCount": 1,
+  "page": 1,
+  "limit": 10,
+  "data": [
+    {
+      "id": 6,
+      "code": "50%OFF",
+      "discountPercentage": 50,
+      "createdAt": "2025-06-20T21:21:40.000Z",
+      "updatedAt": "2025-06-20T21:21:40.000Z"
+    }
+  ]
+}
+```
+
+---
+
+---
+
+**_2- Create a new promo code._**
+
+#### Endpoint
+
+```
+POST /promo-codes/
+```
+
+#### Request Body
+
+```json
+{
+  "code": "Code",
+  "discountPercentage": 70
+}
+```
+
+#### Success Response
+
+##### status code: 201
+
+##### Response body
+
+```json
+{
+  "data": {
+    "id": 9,
+    "code": "Code",
+    "discountPercentage": 70,
+    "updatedAt": "2025-06-20T22:23:20.034Z",
+    "createdAt": "2025-06-20T22:23:20.034Z"
+  }
+}
+```
+
+---
+
+---
 
 ## Postman Collection
 

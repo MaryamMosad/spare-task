@@ -5,7 +5,12 @@ import { PaginationDto } from "../../_common/pagination/pagination-type";
 import { CreatePromoCode } from "../dto";
 
 const createPromoCode = async (input: CreatePromoCode) => {
-  return await PromoCode.create(input);
+  try {
+    return await PromoCode.create(input);
+  } catch (err) {
+    if (err.parent.code === "ER_DUP_ENTRY")
+      throw new HttpError("Code already exists", 409);
+  }
 };
 
 const promoCodeOrError = async (code: string) => {
