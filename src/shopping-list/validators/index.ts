@@ -12,6 +12,13 @@ const addToShoppingListSchema = {
     quantity: Joi.number().optional(),
   }).required(),
 };
+
+const applyPromoCodeSchema = {
+  body: Joi.object({
+    code: Joi.string().required(),
+  }).required(),
+};
+
 const getShoppingListSchema = {
   query: Joi.object({ page: Joi.number(), limit: Joi.number() }).optional(),
 };
@@ -20,4 +27,5 @@ export {
   removeFromShoppingListSchema,
   getShoppingListSchema,
   addToShoppingListSchema,
+  applyPromoCodeSchema,
 };

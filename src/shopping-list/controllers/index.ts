@@ -36,4 +36,18 @@ const getShoppingList = async (
   res.status(200).json(productsRes);
 };
 
-export { addToShoppingList, removeFromShoppingList, getShoppingList };
+const applyPromoCode = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const applyPromo = await shoppingListService.applyPromoCode(req.body);
+  res.status(201).json({ data: applyPromo });
+};
+
+export {
+  addToShoppingList,
+  removeFromShoppingList,
+  getShoppingList,
+  applyPromoCode,
+};

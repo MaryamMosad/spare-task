@@ -1,5 +1,5 @@
 import { PaginationDto } from "../../_common/pagination/pagination-type";
-import { AddToShoppingListDto } from "../dto";
+import { AddToShoppingListDto, ApplyPromoCodeDto } from "../dto";
 import { sequelize } from "../../_common/database/db-connection";
 import { ShoppingListItem } from "../models/shopping-list-items.model";
 import productService from "../../products/services";
@@ -9,6 +9,7 @@ import { fn, literal } from "sequelize";
 import { Product } from "../../products/models/products.model";
 import { ShoppingList } from "../models/shopping-list.model";
 import { PromoCode } from "../../promo-code/models/promo-code.model";
+import promoCodeService from "../../promo-code/services";
 
 const addToShoppingList = async (input: AddToShoppingListDto) => {
   await productService.validateProductAvailability(input);
@@ -114,4 +115,20 @@ const getShoppingListDiscountDetails = async () => {
   };
 };
 
-export default { addToShoppingList, removeFromShoppingList, getShoppingList };
+const applyPromoCode = async (input: ApplyPromoCodeDto) => {
+  const code = await promoCodeService.promoCodeOrError(input.code);
+  const shoppingList = await getCurrentShoppingList();
+  await ShoppingList.update(
+    { promoCodeId: code.id },
+    { where: { id: shoppingList.id } }
+  );
+  return true;
+};
+
+export default {
+  addToShoppingList,
+  removeFromShoppingList,
+  getShoppingList,
+  applyPromoCode,
+  getCurrentShoppingList,
+};
