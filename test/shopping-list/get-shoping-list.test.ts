@@ -1,8 +1,13 @@
 import request from "supertest";
 import app from "../../src/app";
 import { Product } from "../../src/products/models/products.model";
-import { prepareShoppingListItems } from "../../src/shopping-list/mocks";
+import {
+  preparePromoCodeData,
+  prepareShoppingListItems,
+} from "../../src/shopping-list/mocks";
 import { ShoppingListItem } from "../../src/shopping-list/models/shopping-list-items.model";
+import { ShoppingList } from "../../src/shopping-list/models/shopping-list.model";
+import { PromoCode } from "../../src/promo-code/models/promo-code.model";
 
 const calculateFinalPrice = (products) =>
   products.reduce((prev, curr) => prev + curr.price * curr.quantity, 0);
@@ -11,6 +16,8 @@ describe("get shopping list", () => {
   beforeEach(async () => {
     await Product.destroy({ where: {} });
     await ShoppingListItem.destroy({ where: {} });
+    await ShoppingList.destroy({ where: {} });
+    await PromoCode.destroy({ where: {} });
   });
 
   it("get shopping list with total price successfully", async () => {
@@ -62,6 +69,24 @@ describe("get shopping list", () => {
     products[0].price = 5;
     expect(resAfterDelete.body.metaData.finalPrice).toEqual(
       calculateFinalPrice(products)
+    );
+  });
+
+  it("get shopping list with applied promo code", async () => {
+    const products = await prepareShoppingListItems(5);
+    const res = await request(app)
+      .get(`/shopping-lists`)
+      .query({ page: 1, limit: 4 });
+    expect(res.body.metaData.finalPrice).toEqual(calculateFinalPrice(products));
+
+    const promo = await preparePromoCodeData();
+
+    const res2 = await request(app)
+      .get(`/shopping-lists`)
+      .query({ page: 1, limit: 4 });
+    expect(res2.body.metaData.promoCodeApplied).toEqual(promo.code);
+    expect(res2.body.metaData.finalPrice).toEqual(
+      calculateFinalPrice(products) / 2
     );
   });
 });
